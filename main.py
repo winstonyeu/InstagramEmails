@@ -44,10 +44,11 @@ class Keywords():
         return self.words[listNum]
          
 class AutoLoveTag: 
-    def __init__(self):
+    def __init__(self, category):
         self.medialist = []
         self.filename = "users.csv"
         self.USERNAMEFILE = "users.txt"
+        self.category = category
          
     def DecodeJSONData(self, url):
         headers = {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}
@@ -59,26 +60,30 @@ class AutoLoveTag:
         return decodedData
      
     def writeToCSV(self, filename, data):
-        if not os.path.exists("csv"):
-            os.makedirs("csv")
-        filename = "csv/"+filename+".csv"
+        if not os.path.exists(self.category):
+            os.makedirs(self.category)
+        filename = self.category+"/"+filename+".csv"
         fieldnames = ['user', 'followerscount', 'description', 'link', 'tag', 'email']
         csvwriter = csv.DictWriter(open(filename,'a'), delimiter=',', fieldnames=fieldnames, lineterminator="\n")
         csvwriter.writerow(data)
         #print("Done writing")
      
     def WriteToFile(self, filename, text):
-        filename = filename+".txt"
+        filename = self.category+"/filecheck/"+filename+".txt"
         userFile = open(filename, 'a')
         userFile.write(text + "\n")
         userFile.close()
      
     def ClearFile(self, filename):
-        filename = filename+".txt"
+        filename = self.category+"/filecheck/"+filename+".txt"
         open(filename, 'w').close()
          
     def CheckExistenceInFile(self, filename, text):
-        filename = filename+".txt"
+        if not os.path.exists(self.category):
+            os.makedirs(self.category)
+        if not os.path.exists(self.category+"/filecheck"):
+            os.makedirs(self.category+"/filecheck")
+        filename = self.category+"/filecheck/"+filename+".txt"
         open(filename, 'a')
         userFile = open(filename, 'r')
         for text_in_file in userFile.read().splitlines():
@@ -180,16 +185,18 @@ class AutoLoveTag:
                   
 if __name__ == "__main__":
     try:
-        keywords = Keywords(sys.argv[1])
+        category = sys.argv[1]
+        keywords = Keywords(category)
         threads = []
-        lovetag = AutoLoveTag()
+        lovetag = AutoLoveTag(category)
         for thread in range(keywords.WordsLength()):
             t = threading.Thread(target=lovetag.Main, args=(thread, keywords))
             threads.append(t)
             t.start()
-    except Exception:
+    except Exception as e:
+        print(e)
         print("No category choosen")
-    os.system("pause")
+        os.system("pause")
    
 #     lovetag = AutoLoveTag()
 #     lovetag.Main()

@@ -6,3 +6,6 @@ traveldiary
 travelingram
 mytravelgram
 mytravels
+onetwotrip
+traveltheworld
+aroundandmyworld

@@ -3,5 +3,7 @@ catstagram
 cutecatsofinstagram
 kittensofinstagram
 instacats
-insta_cats
-cats_of_instagram
+catsof_instagram
+ilovemycat
+catselfie
+igcats
