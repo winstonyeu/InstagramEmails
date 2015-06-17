@@ -8,6 +8,7 @@ import re, os.path, sys
 from unidecode import unidecode
 
 import threading
+import simplejson
 
 config = Configuration.Configuration('config.ini')
 numoftoken = int(len(config.dictionary) * 0.5)
@@ -56,7 +57,13 @@ class AutoLoveTag:
         #print(response.headers['x-ratelimit-remaining'])
         if response.status_code == 429:
             raise InstagramAPIError("429", "Rate Limit Exceed", "Rate limit exceeded")
-        decodedData = response.json()
+        
+        while True:
+            try:
+                decodedData = response.json()
+                break
+            except simplejson.scanner.JSONDecodeError:
+                continue
         return decodedData
      
     def writeToCSV(self, filename, data):
@@ -135,11 +142,15 @@ class AutoLoveTag:
                             continue
                             
                         user_id = user['user']['id']
-                            
+                        
                         userinfo = self.DecodeJSONData(url % user_id)
-                        user_followers_count = userinfo['data']['counts']['followed_by']
-                        user_email = self.getEmail(userinfo['data']['bio'])
-    
+                        
+                        try:
+                            user_followers_count = userinfo['data']['counts']['followed_by']
+                            user_email = self.getEmail(userinfo['data']['bio'])
+                        except KeyError:
+                            continue
+                            
 #                         userinfo = api.user(user_id)
 #                         user_followers_count = userinfo.counts['followed_by']
 #                         user_email = self.getEmail(userinfo.bio)
