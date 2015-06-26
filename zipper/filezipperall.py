@@ -5,8 +5,10 @@ from os.path import isfile, join
 import re, time
 import zipfile
 
-category = ["artistcovers", "cats", "cleaneating", "dogs", "fashion", "females", "food", "gym", 
-            "mothers", "music", "photographers", "travel", "videographers", "vlogs", "yoga"]
+zipname = {"travel" : "Travel_Zip", "females" : "Females_Zip", "dogs" : "Pets_Dogs_Zip", "cats" : "Pets_Cats_Zip", 
+           "mothers" : "Mothers_Zip", "photographers" : "Art_Photographers_Zip", "videographers" : "Art_Videographers_Zip",
+           "vlogs" : "Vlogs_Zip", "music" : "Music_Covers_Zip", "artistcovers" : "Music_ArtistCovers_Zip",
+           "fashion" : "Fashion_Zip", "gym" : "Fitness_Gym_Zip", "cleaneating" : "Fitness_CleanEating_Zip", "yoga" : "Fitness_Yoga_Zip"}
 
 def zipdir(path, ziph):
     # ziph is zipfile handle
@@ -19,23 +21,21 @@ def zipdir(path, ziph):
     
 if __name__ == '__main__':
     zipnum = 1
-     
+      
     dirs = [d for d in os.listdir('../') if os.path.isdir(os.path.join('../', d))]
-
-    for cat in category:
+ 
+    for category, naming in zipname.items():
         for dir in dirs:
-            if dir == cat:
+            if dir == category:
                 while True:
-                    filename = dir.capitalize() + "_Zip" + str(zipnum) + ".zip"
-                
+                    filename = naming + str(zipnum) + ".zip"
+                  
                     if os.path.isfile(filename):
                         zipnum += 1
                     else:
                         break
-                    
+                      
                 zipnum = 1
                 zipf = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
                 zipdir("../" + dir + "/", zipf)
                 zipf.close()
-        
-        

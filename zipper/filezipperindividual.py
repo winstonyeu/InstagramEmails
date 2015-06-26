@@ -5,6 +5,11 @@ from os.path import isfile, join
 import re, time
 import zipfile
 
+zipname = {"travel" : "Travel_Zip", "females" : "Females_Zip", "dogs" : "Pets_Dogs_Zip", "cats" : "Pets_Cats_Zip", 
+           "mothers" : "Mothers_Zip", "photographers" : "Art_Photographers_Zip", "videographers" : "Art_Videographers_Zip",
+           "vlogs" : "Vlogs_Zip", "music" : "Music_Covers_Zip", "artistcovers" : "Music_ArtistCovers_Zip",
+           "fashion" : "Fashion_Zip", "gym" : "Fitness_Gym_Zip", "cleaneating" : "Fitness_CleanEating_Zip", "yoga" : "Fitness_Yoga_Zip"}
+
 def zipdir(path, ziph):
     # ziph is zipfile handle
     for root, dirs, files in os.walk(path):
@@ -26,12 +31,14 @@ if __name__ == '__main__':
             os.system('cls')
             print("Invalid category, try again")
     
-    while True:
-        filename = category.capitalize() + "_Zip" + str(zipnum) + ".zip"
-        if os.path.isfile(filename):
-            zipnum += 1
-        else:
-            break
+    for cat, naming in zipname.items():
+        if cat == category:
+            while True:
+                filename = naming + str(zipnum) + ".zip"
+                if os.path.isfile(filename):
+                    zipnum += 1
+                else:
+                    break
     
     zipf = zipfile.ZipFile(filename, 'w')
     zipdir("../" + category + "/", zipf)

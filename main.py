@@ -182,8 +182,11 @@ class AutoLoveTag:
 #                     if breakloop:
 #                         breakloop = False
 #                         break
-                        
-                    next_url = users['pagination']['next_url']
+                    
+                    try:
+                        next_url = users['pagination']['next_url']
+                    except KeyError:
+                        break
                 break
             except InstagramAPIError:
                 print(tag_name + ": Rate limit exceeded, waiting %s hour before continuing" % 1)

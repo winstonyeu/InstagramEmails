@@ -5,7 +5,7 @@ from os.path import isfile, join
 import re, time
 
 def userCount(folder, filename):
-    with open(folder + "/" + filename, 'r') as csvfile:
+    with open("../" + folder + "/" + filename, 'r') as csvfile:
         csvreader = csv.reader(csvfile)
         num_lines = sum(1 for row in csvreader if row[5].strip())
         csvfile.close()
@@ -16,7 +16,7 @@ if __name__ == '__main__':
         category = input('Enter category: ')
 
         try:
-            onlyfiles = [ f for f in listdir(category) if isfile(join(category,f)) ]
+            onlyfiles = [ f for f in listdir("../" + category) if isfile(join("../" + category,f)) ]
             break
         except FileNotFoundError:
             os.system('cls')
